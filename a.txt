@@ -1,0 +1,38 @@
+Petitio, Joe
+111-22-3333
+3
+Physics I
+A 5
+English 1A
+B 4
+Chemistry 101
+F 5
+Smithson, John 
+222-22-3333 
+3
+Physics I 
+A  5 
+English 1A 
+B  4 
+Computer Science I 
+A  4
+Jones, Nancy 
+111-33-4444 
+2
+Computer Science I 
+A  4 
+English 1A 
+B  4
+Johnson, Adam 
+222-44-3333 
+5
+Physics I 
+A  5 
+English 1A 
+B  4 
+Computer Science I 
+A  4
+Phisics II 
+A  5 
+English 1B 
+B  4

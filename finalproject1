@@ -1,0 +1,152 @@
+#include <string> 
+#include <iostream> 
+#include <fstream>
+#include <iomanip>
+#include <vector>
+
+using namespace std; 
+
+struct Student { 
+  string studentname = "null";
+  string studentID = "null";
+
+  int numcourses = -1;
+  int totcredits = 0;
+  int compcredits = 0;
+
+  double erncredits = 0.0;
+  double gpa = -1;
+
+  vector<string> classes;
+  vector<int> credits; 
+  vector<char> grades;
+};
+
+bool openFile(ifstream &inFS) {
+  if (inFS.is_open()) {
+    return true;
+  }
+  return false;
+}
+
+void Print_info_one(Student student) {
+  cout << fixed << left << setw(20) << "Name :" << right << student.studentname << endl;
+
+  cout << fixed << left << setw(20) << "ID Number :" << right << student.studentID << endl;
+
+  cout << endl;
+
+  cout << fixed << left << setw(20) << "Course Name" <<setw(10)<< "Grade"<<"Units" << endl;
+
+  for (int i = 0; i < student.numcourses; ++i) {
+    cout << fixed << left << setw(20) << student.classes.at(i)<< setw(20) << student.grades.at(i)<< student.credits.at(i) << endl;
+  }
+
+  cout << endl;
+
+  cout << fixed << left << setw(20) << "Units Completed:" << right << static_cast<int>(student.compcredits) << endl;
+
+  cout << fixed << left << setw(20) << "Units Taken:" << right << student.totcredits << endl;
+
+  cout << fixed << left << setw(20) << "GPA:" << right << setprecision(2) << student.gpa << endl;
+} 
+
+void Read_info(Student &student, ifstream &inFS) {
+  getline(inFS, student.studentname);
+  getline(inFS, student.studentID);
+
+  inFS >> student.numcourses;
+  inFS.ignore(1000, '\n');
+
+  
+  vector<string> cls(student.numcourses);
+  vector<int> cred(student.numcourses);
+  vector<char> grd(student.numcourses);
+
+  for (int i = 0; i < student.numcourses; ++i) {
+    getline(inFS, cls.at(i));
+    inFS >> grd.at(i);
+    //cout << cls.at(0) << " ";
+    inFS >> cred.at(i);
+    inFS.ignore(1000, '\n');
+  }
+
+  inFS.close();
+
+  student.classes = cls;
+  student.credits = cred;
+  student.grades = grd;
+} 
+float Find_points(char curr) {
+
+  if (curr == 'A' || curr == 'a') {
+    return 4;
+  }
+  if (curr == 'B' || curr == 'b') {
+    return 3;
+  }
+  if (curr == 'C' || curr == 'c') {
+    return 2;
+  }
+  if (curr == 'D' || curr == 'd') {
+    return 1;
+  }
+  return 0;
+} // given a letter grade returns points associated to it
+void Process_Stu(Student &) ; 
+// include any additional functions you like.
+void Gpa_Calculator(Student &student) {
+  for (int i = 0; i < student.numcourses; ++i) {
+
+    student.totcredits += student.credits.at(i);
+
+    if (Find_points(student.grades.at(i)) > 1){
+
+      student.compcredits += student.credits.at(i);
+
+    }
+
+    student.erncredits += (student.credits.at(i) * Find_points(student.grades.at(i)));
+  }
+
+  student.gpa = student.erncredits / student.totcredits;
+}
+int main() 
+{ 
+  Student NewStudent; 
+
+  string filename;
+
+  int sum = 0;
+
+  double studentsum = 0.0;
+  cin >> filename;
+  //cout << "p.txt" << endl;
+  //filename = "p.txt";
+  ifstream inFS;
+
+  inFS.open(filename);
+
+  if (!openFile(inFS)) {
+    cout << "Bad file." << endl;
+    return -1;
+  }
+
+  if (inFS.peek() == EOF){ //inFS.eof()) {
+    cout << "No data to process." << endl;
+    return -1;
+  }
+
+  Read_info(NewStudent, inFS);
+
+  if (NewStudent.studentname.compare("null") == 0) {
+    cout << "Bad file." << endl;
+    return -1;
+  }
+
+  Gpa_Calculator(NewStudent);
+
+  Print_info_one(NewStudent);
+
+  return 0;
+}

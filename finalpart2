@@ -1,0 +1,120 @@
+#include <string> 
+#include <iostream> 
+#include <fstream>
+#include <iomanip>
+
+#define CAP 20
+
+using namespace std; 
+
+struct Course{
+// Fill in this area to define your structure 
+// Each course has a title/name, units, and a grade
+};
+struct Student { 
+  int totcredits;
+  int compcredits;
+  double erncredits;
+  double gpa;
+  string name;
+  string id;
+  int coursenum;
+  Course course[];
+// Fill in this area to define your structure 
+// Each student has a name, an ID, number of courses and a list of course
+}; 
+// These are the utility functions that you need to make the program work efficiently, refer to Employee program for help
+bool openFile(ifstream &inFS);
+void Print_info_one(Student student); 
+void Read_Student(Student& stuList); 
+void Read_Student(Student &student, ifstream &inFS); 
+
+float Find_points(char) ; // given a letter grade returns points associated to it
+void Process_Stu(Student &) ; 
+void Read_Course(Course &); 
+void Read_Course(Course &, ifstream &); 
+void printStudentTable(Student []);  // print the list of students' data in a tabular from refer to the provided sample 
+
+// include any additional functions you like.
+int main() 
+{ 
+  string filename;
+  int i = 0;
+  cin >> filename;
+  ifstream inFS;
+  inFS.open(filename);
+  Student stuList[CAP];
+  while (openFile(inFS)) {
+      if (inFS.peek() == EOF) {
+        break;
+    } 
+    Read_Student(stuList[i], inFS);
+    i++;
+  }
+  i++;
+
+/*
+•    Open a file and read the data for all students (Refer to the file format shown above)
+•    For each student keep the following data in one array of students
+•    Print the table of students
+•    Sort the list of students alphabetically
+•    Prompt user for a student’s name and print the details, if not found print: Student is not on the list
+•    Prompt user for a student’s name and print the details, if not found print: Student is not on the list
+•    Print the table of students' data (Use the format shown) 
+*/
+}
+
+bool openFile(ifstream &inFS) {
+  if (inFS.is_open()) {
+    return true;
+  }
+  return false;
+}
+
+void Print_info_one(Student student) {
+  cout << fixed << left << setw(20) << "Name :" << right << student.name << endl;
+
+  cout << fixed << left << setw(20) << "ID Number :" << right << student.id << endl;
+
+  cout << endl;
+
+  cout << fixed << left << setw(20) << "Course Name" <<setw(10)<< "Grade"<<"Units" << endl;
+
+  for (int i = 0; i < student.coursenum; ++i) {
+    //cout << fixed << left << setw(20) << student.classes.at(i)<< setw(20)student.grades.at(i)<< student.credits.at(i) << endl;
+  }
+
+  cout << endl;
+
+  cout << fixed << left << setw(20) << "Units Completed:" << right << static_cast<int>(student.compcredits) << endl;
+
+  cout << fixed << left << setw(20) << "Units Taken:" << right << student.totcredits << endl;
+
+  cout << fixed << left << setw(20) << "GPA:" << right << setprecision(2) << student.gpa << endl;
+} 
+
+float Find_points(char curr) {
+
+  if (curr == 'A' || curr == 'a') {
+    return 4;
+  }
+  if (curr == 'B' || curr == 'b') {
+    return 3;
+  }
+  if (curr == 'C' || curr == 'c') {
+    return 2;
+  }
+  if (curr == 'D' || curr == 'd') {
+    return 1;
+  }
+  return 0;
+}
+
+void Read_Student(Student &student, ifstream &inFS) {
+
+  getline(inFS, student.name);
+  getline(inFS, student.id);
+
+  inFS >> student.coursenum;
+  inFS.ignore(1000, '\n');  
+}
